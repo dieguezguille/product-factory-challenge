@@ -1,0 +1,11 @@
+{
+  "devDependencies": {
+    "@sumup/foundry": "^4.0.2"
+  },
+  "scripts": {
+    "lint": "foundry run eslint . --ext .js,.jsx,.json,.ts,.tsx",
+    "lint:fix": "yarn lint --fix",
+    "lint:ci": "yarn lint --format github",
+    "create:component": "foundry run plop component"
+  }
+}
