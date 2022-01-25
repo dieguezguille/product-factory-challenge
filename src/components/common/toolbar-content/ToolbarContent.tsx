@@ -11,30 +11,13 @@ const ToolbarContent: React.FC = () => (
     <Toolbar sx={{ overflow: 'auto' }} />
     <List>
       <AccordionCustom isMenu summary="Products">
-        <ListItemCustom
-          // onClick={() => navigate(RoutesEnum.NFT_COL_GALLERY)}
-          icon={<CollectionsIcon />}
-          text="Test"
-        />
-        <ListItemCustom
-          // onClick={() => navigate(RoutesEnum.NFT_COL_CREATE)}
-          icon={<AddBoxIcon />}
-          text="Test2"
-        />
+        <ListItemCustom icon={<CollectionsIcon />} text="All" />
+        <ListItemCustom icon={<AddBoxIcon />} text="Add New" />
       </AccordionCustom>
       <AccordionCustom isMenu summary="Delegations">
-        <ListItemCustom
-          // onClick={() => navigate(RoutesEnum.TOKEN_GALLERY)}
-          icon={<CollectionsIcon />}
-          text="See delegations"
-        />
-        <ListItemCustom
-          // onClick={() => navigate(RoutesEnum.TOKEN_CREATE)}
-          icon={<AddBoxIcon />}
-          text="Delegate product"
-        />
+        <ListItemCustom icon={<CollectionsIcon />} text="View Pending" />
+        <ListItemCustom icon={<AddBoxIcon />} text="Delegate" />
       </AccordionCustom>
-
       <Stack
         direction="row"
         sx={{
