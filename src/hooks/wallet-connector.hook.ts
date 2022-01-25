@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Web3 from 'web3';
 
 type WalletConnectorReturnType = {
@@ -28,6 +28,42 @@ const useWalletConnector = (): WalletConnectorReturnType => {
     setAddress(undefined);
     setChainId(undefined);
   };
+
+  useEffect(() => {
+    if (window.ethereum?.on) {
+      const handleAccountsChanged = (accounts: string[]) => {
+        // eslint-disable-next-line no-console
+        console.log(`Account changed! New address: ${accounts[0]}`);
+        setAddress(accounts[0]);
+      };
+
+      // const handleChainChanged = () => {
+      //   window.location.reload();
+      // };
+
+      // const handleDisconnect = (error: { code: number; message: string }) => {
+      //   // eslint-disable-next-line no-console
+      //   console.log('disconnect', error.code, error.message);
+      //   disconnect();
+      // };
+
+      window.ethereum.on('accountsChanged', handleAccountsChanged);
+      // window.ethereum.on('chainChanged', handleChainChanged);
+      // window.ethereum.on('disconnect', handleDisconnect);
+
+      return () => {
+        if (window.ethereum.removeListener) {
+          window.ethereum.removeListener(
+            'accountsChanged',
+            handleAccountsChanged,
+          );
+          // window.ethereum.removeListener('chainChanged', handleChainChanged);
+          // window.ethereum.removeListener('disconnect', handleDisconnect);
+        }
+      };
+    }
+    return () => {};
+  }, []);
 
   return { connect, disconnect, address, chainId };
 };
