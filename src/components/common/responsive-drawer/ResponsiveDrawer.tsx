@@ -8,7 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
-import ToolbarContent from '../toolbar-content/ToolbarContent';
+import SidebarContent from '../sidebar-content/SidebarContent';
 
 const drawerWidth = 240;
 
@@ -65,7 +65,7 @@ const ResponsiveDrawer: React.FC = (props) => {
             },
           }}
         >
-          <ToolbarContent />
+          <SidebarContent />
         </Drawer>
         <Drawer
           variant="permanent"
@@ -78,11 +78,11 @@ const ResponsiveDrawer: React.FC = (props) => {
           }}
           open
         >
-          <ToolbarContent />
+          <SidebarContent />
         </Drawer>
       </Box>
 
-      {/* Content */}
+      {/* Main Content */}
 
       <Box
         component="main"
