@@ -6,7 +6,7 @@ import { List, Stack, Toolbar } from '@mui/material';
 import ListItemCustom from '../list-item-custom/ListItemCustom';
 import AccordionCustom from '../accordion-custom/AccordionCustom';
 
-const ToolbarContent: React.FC = () => (
+const SidebarContent: React.FC = () => (
   <>
     <Toolbar sx={{ overflow: 'auto' }} />
     <List>
@@ -31,4 +31,4 @@ const ToolbarContent: React.FC = () => (
   </>
 );
 
-export default ToolbarContent;
+export default SidebarContent;
