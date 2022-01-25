@@ -61,15 +61,15 @@ const useWalletConnector = (): WalletConnectorReturnType => {
         window.location.reload();
       };
 
-      // const handleDisconnect = (error: { code: number; message: string }) => {
-      //   // eslint-disable-next-line no-console
-      //   console.log('disconnect', error.code, error.message);
-      //   disconnect();
-      // };
+      const handleDisconnect = (error: { code: number; message: string }) => {
+        // eslint-disable-next-line no-console
+        console.log('disconnect', error.code, error.message);
+        disconnect();
+      };
 
       window.ethereum.on('accountsChanged', handleAccountsChanged);
       window.ethereum.on('chainChanged', handleChainChanged);
-      // window.ethereum.on('disconnect', handleDisconnect);
+      window.ethereum.on('disconnect', handleDisconnect);
 
       return () => {
         if (window.ethereum.removeListener) {
@@ -78,7 +78,7 @@ const useWalletConnector = (): WalletConnectorReturnType => {
             handleAccountsChanged,
           );
           window.ethereum.removeListener('chainChanged', handleChainChanged);
-          // window.ethereum.removeListener('disconnect', handleDisconnect);
+          window.ethereum.removeListener('disconnect', handleDisconnect);
         }
       };
     }
