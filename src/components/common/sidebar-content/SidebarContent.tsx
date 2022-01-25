@@ -14,7 +14,7 @@ const SidebarContent: React.FC = () => {
   return (
     <>
       <Toolbar sx={{ overflow: 'auto' }} />
-      <List>
+      <List sx={{ paddingTop: '0px' }}>
         <AccordionCustom isMenu summary="Products">
           <ListItemCustom
             onClick={() => navigate(RoutesEnum.PRODUCTS)}

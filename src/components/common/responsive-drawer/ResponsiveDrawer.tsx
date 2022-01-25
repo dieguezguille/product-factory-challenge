@@ -1,18 +1,20 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 
-import SidebarContent from '../sidebar-content/SidebarContent';
+import AppBarCustom from '../app-bar-custom/AppBarCustom';
+
+type ResponsiveDrawerProps = {
+  sidebarContent: React.ReactNode;
+};
 
 const drawerWidth = 240;
+const boxShadow =
+  '0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)';
 
-const ResponsiveDrawer: React.FC = (props) => {
+const ResponsiveDrawer: React.FC<ResponsiveDrawerProps> = (props) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -22,68 +24,51 @@ const ResponsiveDrawer: React.FC = (props) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Product Factory
-          </Typography>
-        </Toolbar>
-      </AppBar>
+
+      {/* AppBar Custom */}
+      <AppBarCustom handleDrawerToggle={handleDrawerToggle} />
+
+      {/* Navigation */}
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
+          className="drawer"
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
+          ModalProps={{ keepMounted: true }}
           sx={{
             'display': { xs: 'block', sm: 'none' },
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
               width: drawerWidth,
+              boxShadow,
             },
           }}
         >
-          <SidebarContent />
+          {props.sidebarContent}
         </Drawer>
         <Drawer
+          className="drawer"
           variant="permanent"
           sx={{
             'display': { xs: 'none', sm: 'block' },
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
               width: drawerWidth,
+              boxShadow,
             },
           }}
           open
         >
-          <SidebarContent />
+          {props.sidebarContent}
         </Drawer>
       </Box>
 
       {/* Main Content */}
-
       <Box
         component="main"
         sx={{
