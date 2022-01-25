@@ -25,5 +25,3 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install dependencies
         run: yarn --pure-lockfile --prefer-offline
-      - name: Lint
-        run: yarn lint:ci
