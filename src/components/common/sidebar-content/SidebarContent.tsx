@@ -19,7 +19,7 @@ const SidebarContent: React.FC = () => {
           <ListItemCustom
             onClick={() => navigate(RoutesEnum.PRODUCTS)}
             icon={<CollectionsIcon />}
-            text="All"
+            text="View All"
           />
           <ListItemCustom
             onClick={() => navigate(RoutesEnum.CREATE_PRODUCT)}

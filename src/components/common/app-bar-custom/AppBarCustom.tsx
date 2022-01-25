@@ -1,6 +1,6 @@
 import React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
-import { styled, Theme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import {
   AppBar,
   Box,
