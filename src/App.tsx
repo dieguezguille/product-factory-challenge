@@ -1,11 +1,13 @@
 import React from 'react';
+import { CssBaseline } from '@mui/material';
 
-import ResponsiveDrawer from './components/main/responsive-drawer/ResponsiveDrawer';
+import Routes from './routes/Routes';
 
 function App(): JSX.Element {
   return (
     <>
-      <ResponsiveDrawer />
+      <CssBaseline />
+      <Routes />
     </>
   );
 }

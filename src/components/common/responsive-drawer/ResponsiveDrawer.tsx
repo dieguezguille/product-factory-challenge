@@ -1,14 +1,13 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
 import Drawer from '@mui/material/Drawer';
 
-import AppBar from '../../common/app-bar/AppBar';
+import AppBar from '../app-bar/AppBar';
 
 const drawerWidth = 240;
 
 type ResponsiveDrawerProps = {
-  drawerContent?: React.ReactNode;
+  drawerContent: React.ReactNode;
 };
 
 const boxShadow =
@@ -22,8 +21,6 @@ const ResponsiveDrawer: React.FC<ResponsiveDrawerProps> = (props) => {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-
       {/* AppBar */}
       <AppBar handleDrawerToggle={handleDrawerToggle} />
 
