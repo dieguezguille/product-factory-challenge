@@ -4,15 +4,17 @@ Se desea tener una aplicación (dApp) donde se integre el smart contract Product
 
 La dapp debe permitir:
 
-1 - Ver todos los productos del contrato con el detalle completo de cada uno.
-2 - Crear un producto utilizando la integración con metamask.
-3 - Delegar un producto utilizando la integración con metamask.
-4 - Aceptar una delegación de un producto utilizando la integración con metamask.
-5 - Tener un apartado donde se pueda ver, de la wallet conectada, los productos que le fueron delegados para poder aceptarlos desde dicha pantalla.
+1. Ver todos los productos del contrato con el detalle completo de cada uno.
+2. Crear un producto utilizando la integración con metamask.
+3. Delegar un producto utilizando la integración con metamask.
+4. Aceptar una delegación de un producto utilizando la integración con metamask.
+5. Tener un apartado donde se pueda ver, de la wallet conectada, los productos que le fueron delegados para poder aceptarlos desde dicha pantalla.
 
-El smart contract ProductFactory se encuentra en la testnet mumbai de polygon y su address es: 0xd9E0b2C0724F3a01AaECe3C44F8023371f845196
+El smart contract **ProductFactory** se encuentra en la testnet mumbai de polygon y su address es:
 
-La dapp debe desarrollarse con ReactJS y la librería web3.js
+**0xd9E0b2C0724F3a01AaECe3C44F8023371f845196**
+
+La dapp debe desarrollarse con **ReactJS** y la librería **web3.js**
 
 No es necesario realizar todos los puntos, si los realiza es mejor y si tiene que optar por priorizar asuma que a menor valor numérico en el listado mayor prioridad
 
