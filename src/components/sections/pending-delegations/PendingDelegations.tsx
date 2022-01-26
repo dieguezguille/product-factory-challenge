@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import {
   TableContainer,
   Paper,
@@ -9,6 +8,7 @@ import {
   TableBody,
   IconButton,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import React, { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -30,6 +30,14 @@ const PendingDelegations: React.FC = () => {
 
   return (
     <>
+      <Typography
+        textAlign="center"
+        variant="h5"
+        component="h2"
+        sx={{ marginBottom: '25px' }}
+      >
+        Pending Delegations
+      </Typography>
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
           <TableHead>
