@@ -15,8 +15,11 @@
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.2.1",
     "react-scripts": "4.0.3",
+    "uuid": "^8.3.2",
     "web-vitals": "^2.1.4",
-    "web3": "^1.7.0"
+    "web3": "^1.7.0",
+    "web3-eth-contract": "^1.7.0",
+    "web3-utils": "^1.7.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -50,6 +53,7 @@
     "@sumup/foundry": "^4.0.2",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
+    "@types/uuid": "^8.3.4",
     "react-hot-loader": "^4.5.3",
     "svg-react-loader": "^0.4.6",
     "typescript": "^4.5.5"
