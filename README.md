@@ -1,4 +1,4 @@
-# Descripción del Challenge:
+# Descripción del Challenge
 
 Se desea tener una aplicación (dApp) donde se integre el smart contract ProductFactory y que a través de ella se puedan realizar transacciones con metamask:
 
@@ -17,6 +17,6 @@ No es necesario realizar todos los puntos, si los realiza es mejor y si tiene qu
 
 Se valorará todo el background que considere colocar como tests, readmes, documentación, etc.
 
-# Notas:
+# Notas
 
 - Se utilizó una version más vieja de react-scripts para compilar debido a un problema de incompatibilidad con la última version de webpack que pedía polyfills para varios modulos que no son exclusivamente de uso web. Una solución consistía en eyectar la aplicación para modificar webpack, lo cual no está recomendado. La solución elegida (el downgrade) fue la elección mayoritaria de los usuarios del repositorio: https://github.com/facebook/create-react-app/issues/11756.
