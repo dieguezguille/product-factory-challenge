@@ -17,6 +17,7 @@ type ProductFactoryReturnType = {
   products: Array<IProduct>;
   loadProducts: (productSize: number) => Promise<Array<IProduct> | undefined>;
   createProduct: (name: string) => Promise<void>;
+  delegateProduct: (productId: number, newOwner: string) => Promise<void>;
   size: number;
 };
 
@@ -79,11 +80,29 @@ const useProductFactory = (): ProductFactoryReturnType => {
     if (!contract) {
       return;
     }
+
     const result = await contract.methods
       .createProduct(name)
       .send({ from: address });
 
     const receipt = result.events.NewProduct.returnValues;
+
+    if (receipt) {
+      console.log(receipt);
+    }
+  };
+
+  const delegateProduct = async (productId: number, newOwner: string) => {
+    console.log('contract:', contract, 'address:', address);
+    if (!contract) {
+      return;
+    }
+
+    const result = await contract.methods
+      .delegateProduct(productId, newOwner)
+      .send({ from: address });
+
+    const receipt = result.events.DelegateProduct.returnValues;
 
     if (receipt) {
       console.log(receipt);
@@ -108,7 +127,7 @@ const useProductFactory = (): ProductFactoryReturnType => {
     }
   }, [contract, getProductsSize]);
 
-  return { products, loadProducts, createProduct, size };
+  return { products, loadProducts, createProduct, delegateProduct, size };
 };
 
 export default useProductFactory;
