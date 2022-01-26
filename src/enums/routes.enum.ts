@@ -4,4 +4,5 @@ export enum RoutesEnum {
   PRODUCTS = '/products',
   CREATE_PRODUCT = '/products/create',
   PENDING_DELEGATIONS = '/delegations',
+  DELEGATE = '/delegations/delegate',
 }

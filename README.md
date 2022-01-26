@@ -1,70 +1,25 @@
-# Getting Started with Create React App
+# Descripción del Challenge
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Se desea tener una aplicación (dApp) donde se integre el smart contract ProductFactory y que a través de ella se puedan realizar transacciones con metamask:
 
-## Available Scripts
+La dapp debe permitir:
 
-In the project directory, you can run:
+1. Ver todos los productos del contrato con el detalle completo de cada uno.
+2. Crear un producto utilizando la integración con metamask.
+3. Delegar un producto utilizando la integración con metamask.
+4. Aceptar una delegación de un producto utilizando la integración con metamask.
+5. Tener un apartado donde se pueda ver, de la wallet conectada, los productos que le fueron delegados para poder aceptarlos desde dicha pantalla.
 
-### `npm start`
+El smart contract **ProductFactory** se encuentra en la testnet mumbai de polygon y su address es:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**0xd9E0b2C0724F3a01AaECe3C44F8023371f845196**
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+La dapp debe desarrollarse con **ReactJS** y la librería **web3.js**
 
-### `npm test`
+No es necesario realizar todos los puntos, si los realiza es mejor y si tiene que optar por priorizar asuma que a menor valor numérico en el listado mayor prioridad
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Se valorará todo el background que considere colocar como tests, readmes, documentación, etc.
 
-### `npm run build`
+# Notas
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Se utilizó una version más vieja de react-scripts para compilar debido a un problema de incompatibilidad con la última version de webpack que pedía polyfills para varios modulos que no son exclusivamente de uso web. Una solución consistía en eyectar la aplicación para modificar webpack, lo cual no está recomendado. La solución elegida (el downgrade) fue la elección mayoritaria de los usuarios del repositorio: https://github.com/facebook/create-react-app/issues/11756.
