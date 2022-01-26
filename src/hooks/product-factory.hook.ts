@@ -15,6 +15,8 @@ import useWalletConnector from './wallet-connector.hook';
 
 type ProductFactoryReturnType = {
   products: Array<IProduct>;
+  loadProducts: (productSize: number) => Promise<Array<IProduct> | undefined>;
+  createProduct: (name: string) => Promise<void>;
   size: number;
 };
 
@@ -47,8 +49,8 @@ const useProductFactory = (): ProductFactoryReturnType => {
         return undefined;
       }
 
-      const receipt = await contract.methods.products(index).call();
-      const newProduct: IProduct = { ...receipt };
+      const result = await contract.methods.products(index).call();
+      const newProduct: IProduct = { ...result };
       return newProduct;
     },
     [contract],
@@ -72,6 +74,22 @@ const useProductFactory = (): ProductFactoryReturnType => {
     [contract, getProductByIndex],
   );
 
+  const createProduct = async (name: string) => {
+    console.log('contract:', contract, 'address:', address);
+    if (!contract) {
+      return;
+    }
+    const result = await contract.methods
+      .createProduct(name)
+      .send({ from: address });
+
+    const receipt = result.events.NewProduct.returnValues;
+
+    if (receipt) {
+      console.log(receipt);
+    }
+  };
+
   useEffect(() => {
     if (size > 0) {
       loadProducts(size);
@@ -90,7 +108,7 @@ const useProductFactory = (): ProductFactoryReturnType => {
     }
   }, [contract, getProductsSize]);
 
-  return { products, size };
+  return { products, loadProducts, createProduct, size };
 };
 
 export default useProductFactory;
