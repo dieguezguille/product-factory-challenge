@@ -10,7 +10,6 @@ import useProductFactory from '../../../hooks/product-factory.hook';
 const ProductCreation: React.FC = () => {
   const { createProduct } = useProductFactory();
   const handleSubmit = async (values: ProductType) => {
-    // eslint-disable-next-line no-console
     await createProduct(values.name);
   };
 

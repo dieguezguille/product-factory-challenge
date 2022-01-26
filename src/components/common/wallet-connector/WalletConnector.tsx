@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -5,7 +6,7 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { Button, ButtonProps, Tooltip } from '@mui/material';
 import React from 'react';
 
-import useWalletConnector from '../../../hooks/wallet-connector.hook';
+import useWalletProvider from '../../../hooks/wallet-provider.hook';
 
 type WalletConnectorProps = {
   tooltipConnected: string;
@@ -17,7 +18,7 @@ export const WalletConnector: React.FC<WalletConnectorProps> = ({
   tooltipDisconnected,
   ...rest
 }) => {
-  const { connect, disconnect, address } = useWalletConnector();
+  const { connect, disconnect, address } = useWalletProvider();
 
   const getWalletaddress = (walletAddress: string) =>
     `${String(walletAddress).substring(0, 6)}...${String(
@@ -25,11 +26,7 @@ export const WalletConnector: React.FC<WalletConnectorProps> = ({
     ).substring(38)}`;
 
   const handleWalletConnection = async () => {
-    if (address) {
-      disconnect();
-      return;
-    }
-    await connect();
+    address ? disconnect() : await connect();
   };
 
   return (

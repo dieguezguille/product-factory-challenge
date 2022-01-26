@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-floating-promises */
@@ -7,11 +8,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AbiItem } from 'web3-utils';
 import { Contract } from 'web3-eth-contract';
+import { useSnackbar } from 'notistack';
 
 import ProductFactoryAbi from '../abis/ProductFactory.json';
 import { IProduct } from '../interfaces/product.interface';
 
-import useWalletConnector from './wallet-connector.hook';
+import useWalletProvider from './wallet-provider.hook';
 
 type ProductFactoryReturnType = {
   products: Array<IProduct>;
@@ -25,7 +27,11 @@ type ProductFactoryReturnType = {
 };
 
 const useProductFactory = (): ProductFactoryReturnType => {
-  const { address } = useWalletConnector();
+  // Dependencies
+  const { enqueueSnackbar } = useSnackbar();
+  const { web3Provider, address } = useWalletProvider();
+
+  // State
   const [contract, setContract] = useState<Contract | undefined>(undefined);
   const [size, setSize] = useState<number>(0);
   const [products, setProducts] = useState<Array<IProduct>>([]);
@@ -33,13 +39,21 @@ const useProductFactory = (): ProductFactoryReturnType => {
     [],
   );
 
-  const loadContract = () => {
-    const loadedContract = new window.web3.eth.Contract(
-      ProductFactoryAbi as AbiItem[],
-      process.env.REACT_APP_CONTRACT_ADDRESS,
-    );
-    setContract(loadedContract);
-  };
+  // Functions
+  const loadContract = useCallback(() => {
+    if (web3Provider && !contract) {
+      const loadedContract = new web3Provider.eth.Contract(
+        ProductFactoryAbi as AbiItem[],
+        process.env.REACT_APP_CONTRACT_ADDRESS,
+      );
+      setContract(loadedContract);
+      console.log('ProductFactory Contract Found');
+    } else {
+      enqueueSnackbar('ProductFactory Contract Not Found', {
+        variant: 'error',
+      });
+    }
+  }, [contract, enqueueSnackbar, web3Provider]);
 
   const getProductsSize = useCallback(async (): Promise<number | void> => {
     if (!contract) {
@@ -52,8 +66,6 @@ const useProductFactory = (): ProductFactoryReturnType => {
 
   const getProductByIndex = useCallback(
     async (index: number): Promise<IProduct | undefined> => {
-      console.log('contract:', contract);
-
       if (!contract) {
         return undefined;
       }
@@ -81,8 +93,6 @@ const useProductFactory = (): ProductFactoryReturnType => {
 
   const getPendingDelegations = useCallback(() => {
     if (address) {
-      console.log('products:', products);
-
       const delegations = products.filter(
         (product) =>
           product.status.toString() === '1' &&
@@ -96,7 +106,6 @@ const useProductFactory = (): ProductFactoryReturnType => {
   }, [products]);
 
   const createProduct = async (name: string) => {
-    console.log('contract:', contract, 'address:', address);
     if (!contract) {
       return;
     }
@@ -113,7 +122,6 @@ const useProductFactory = (): ProductFactoryReturnType => {
   };
 
   const delegateProduct = async (productId: number, newOwner: string) => {
-    console.log('contract:', contract, 'address:', address);
     if (!contract) {
       return;
     }
@@ -130,7 +138,6 @@ const useProductFactory = (): ProductFactoryReturnType => {
   };
 
   const acceptProduct = async (productId: number) => {
-    console.log('contract:', contract, 'address:', address);
     if (!contract) {
       return;
     }
@@ -146,23 +153,23 @@ const useProductFactory = (): ProductFactoryReturnType => {
     }
   };
 
-  useEffect(() => {
-    if (size > 0) {
-      getAllProducts(size);
-    }
-  }, [size, getAllProducts]);
+  // useEffect(() => {
+  //   if (size > 0) {
+  //     getAllProducts(size);
+  //   }
+  // }, [size, getAllProducts]);
+
+  // useEffect(() => {
+  //   if (contract) {
+  //     getProductsSize();
+  //   }
+  // }, [contract, getProductsSize]);
 
   useEffect(() => {
-    if (address) {
+    if (web3Provider) {
       loadContract();
     }
-  }, [address]);
-
-  useEffect(() => {
-    if (contract) {
-      getProductsSize();
-    }
-  }, [contract, getProductsSize]);
+  }, [web3Provider]);
 
   return {
     products,
