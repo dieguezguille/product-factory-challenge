@@ -22,7 +22,7 @@ const ProductDisplay: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(0);
 
-  const handleModalOpen = (id: number) => {
+  const handleDialogOpen = (id: number) => {
     setSelectedProductId(id);
     setDialogOpen(true);
   };
@@ -37,7 +37,8 @@ const ProductDisplay: React.FC = () => {
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
-              <TableCell>Product</TableCell>
+              <TableCell align="center">ID</TableCell>
+              <TableCell>Name</TableCell>
               <TableCell align="center">Status</TableCell>
               <TableCell align="right">Owner</TableCell>
               <TableCell align="right">New Owner</TableCell>
@@ -45,11 +46,12 @@ const ProductDisplay: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map((product, index) => (
+            {products.map((product) => (
               <TableRow
                 key={uuidv4()}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
+                <TableCell align="center">{product.id}</TableCell>
                 <TableCell component="th" scope="row">
                   {product.name}
                 </TableCell>
@@ -60,7 +62,7 @@ const ProductDisplay: React.FC = () => {
                   <Tooltip title="Delegate">
                     <IconButton
                       aria-label="delegate"
-                      onClick={() => handleModalOpen(index)}
+                      onClick={() => handleDialogOpen(product.id)}
                     >
                       <IosShareIcon />
                     </IconButton>
