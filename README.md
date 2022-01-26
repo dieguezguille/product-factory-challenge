@@ -11,7 +11,8 @@ La dapp debe permitir:
 5 - Tener un apartado donde se pueda ver, de la wallet conectada, los productos que le fueron delegados para poder aceptarlos desde dicha pantalla.
 
 El smart contract ProductFactory se encuentra en la testnet mumbai de polygon y su address es: 0xd9E0b2C0724F3a01AaECe3C44F8023371f845196
-La dapp debe desarrollarse con reactjs y la lib web3
+
+La dapp debe desarrollarse con ReactJS y la librería web3.js
 
 No es necesario realizar todos los puntos, si los realiza es mejor y si tiene que optar por priorizar asuma que a menor valor numérico en el listado mayor prioridad
 
