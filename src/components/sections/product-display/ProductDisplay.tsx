@@ -22,8 +22,7 @@ const ProductDisplay: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(0);
 
-  const handleDelegate = (id: number) => {
-    // eslint-disable-next-line no-console
+  const handleModalOpen = (id: number) => {
     setSelectedProductId(id);
     setDialogOpen(true);
   };
@@ -61,7 +60,7 @@ const ProductDisplay: React.FC = () => {
                   <Tooltip title="Delegate">
                     <IconButton
                       aria-label="delegate"
-                      onClick={() => handleDelegate(index)}
+                      onClick={() => handleModalOpen(index)}
                     >
                       <IosShareIcon />
                     </IconButton>

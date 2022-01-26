@@ -10,18 +10,25 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Stack } from '@mui/material';
 
+import useProductFactory from '../../../hooks/product-factory.hook';
+
 type DelegationDialogProps = {
   productId: number;
   isOpen: boolean;
   handleClose: () => void;
 };
 
+type DelegationValues = {
+  productId: number;
+  newOwner: string;
+};
+
 const DelegationDialog: React.FC<DelegationDialogProps> = (props) => {
   const { productId, isOpen, handleClose } = props;
+  const { delegateProduct } = useProductFactory();
 
-  const handleDelegate = () => {
-    // TODO: Make delegation
-    handleClose();
+  const handleDelegate = async (values: DelegationValues) => {
+    await delegateProduct(values.productId, values.newOwner);
   };
 
   const formik = useFormik({
