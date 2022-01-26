@@ -33,11 +33,6 @@ const SidebarContent: React.FC = () => {
             icon={<CollectionsIcon />}
             text="View Pending"
           />
-          <ListItemCustom
-            onClick={() => navigate(RoutesEnum.DELEGATE)}
-            icon={<AddBoxIcon />}
-            text="Delegate"
-          />
         </AccordionCustom>
         <Stack
           direction="row"

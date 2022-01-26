@@ -4,7 +4,6 @@ import { Navigate, RouteObject, useRoutes } from 'react-router-dom';
 import ContentLayout from '../components/layout/ContentLayout';
 import PendingDelegations from '../components/sections/pending-delegations/PendingDelegations';
 import ProductCreation from '../components/sections/product-creation/ProductCreation';
-import ProductDelegation from '../components/sections/product-delegation/ProductDelegation';
 import ProductDisplay from '../components/sections/product-display/ProductDisplay';
 import { RoutesEnum } from '../enums/routes.enum';
 
@@ -20,7 +19,6 @@ const AppRoutes: RouteObject[] = [
       },
       { path: RoutesEnum.CREATE_PRODUCT, element: <ProductCreation /> },
       { path: RoutesEnum.PENDING_DELEGATIONS, element: <PendingDelegations /> },
-      { path: RoutesEnum.DELEGATE, element: <ProductDelegation /> },
       { path: RoutesEnum.ANY, element: <Navigate to={RoutesEnum.PRODUCTS} /> },
     ],
   },
