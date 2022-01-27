@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import {
   TableContainer,
@@ -13,7 +12,7 @@ import {
   Typography,
   Button,
 } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import IosShareIcon from '@mui/icons-material/IosShare';
 
@@ -37,9 +36,9 @@ const ProductDisplay: React.FC = () => {
     setDialogOpen(false);
   };
 
-  const handleRefresh = () => {
+  const handleRefresh = useCallback(() => {
     getAllProducts();
-  };
+  }, [getAllProducts]);
 
   useEffect(() => {
     if (contract) {

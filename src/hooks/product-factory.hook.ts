@@ -46,6 +46,7 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
   const getProductsSize = async (): Promise<number | void> => {
     const result: number = await contract?.methods.size().call();
     setProductsSize(result);
+    return result;
   };
 
   const getProductByIndex = async (
@@ -63,8 +64,10 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
   };
 
   const getAllProducts = async () => {
+    enqueueSnackbar('Getting products...', { variant: 'info' });
+    const size = await getProductsSize();
     const productPromises = [];
-    for (let index = 0; index < productsSize; index += 1) {
+    for (let index = 0; index < size; index += 1) {
       productPromises.push(getProductByIndex(index));
     }
     const results = await Promise.all(productPromises);
@@ -72,6 +75,7 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
   };
 
   const getPendingDelegations = async () => {
+    enqueueSnackbar('Getting pending delegations...', { variant: 'info' });
     await getAllProducts();
     const delegations = products.filter(
       (product) =>
@@ -82,6 +86,7 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
   };
 
   const createProduct = async (name: string) => {
+    enqueueSnackbar('Creating product...', { variant: 'info' });
     const result = await contract?.methods
       .createProduct(name)
       .send({ from: address });
@@ -92,6 +97,7 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
   };
 
   const delegateProduct = async (productId: number, newOwner: string) => {
+    enqueueSnackbar('Delegating product...', { variant: 'info' });
     const result = await contract?.methods
       .delegateProduct(productId, newOwner)
       .send({ from: address });
@@ -102,6 +108,7 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
   };
 
   const acceptProduct = async (productId: number) => {
+    enqueueSnackbar('Accepting product...', { variant: 'info' });
     const result = await contract?.methods
       .acceptProduct(productId)
       .send({ from: address });
@@ -110,12 +117,6 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
       enqueueSnackbar('Product accepted successfully', { variant: 'success' });
     }
   };
-
-  useEffect(() => {
-    if (contract) {
-      getProductsSize();
-    }
-  }, [contract]);
 
   useEffect(() => {
     if (web3Provider) {
