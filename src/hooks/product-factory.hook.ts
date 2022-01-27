@@ -118,12 +118,18 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
   };
 
   const acceptProduct = async (productId: number) => {
-    const result = await contract?.methods
-      .acceptProduct(productId)
-      .send({ from: address });
-    const receipt = result.events.AcceptProduct.returnValues;
-    if (receipt) {
-      enqueueSnackbar('Product accepted successfully', { variant: 'success' });
+    if (connected) {
+      const result = await contract?.methods
+        .acceptProduct(productId)
+        .send({ from: address });
+      const receipt = result.events.AcceptProduct.returnValues;
+      if (receipt) {
+        enqueueSnackbar('Product accepted successfully', {
+          variant: 'success',
+        });
+      }
+    } else {
+      enqueueSnackbar('Connect wallet to continue', { variant: 'error' });
     }
   };
 
