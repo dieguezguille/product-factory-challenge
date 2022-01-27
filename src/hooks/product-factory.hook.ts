@@ -102,12 +102,18 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
   };
 
   const delegateProduct = async (productId: number, newOwner: string) => {
-    const result = await contract?.methods
-      .delegateProduct(productId, newOwner)
-      .send({ from: address });
-    const receipt = result.events.DelegateProduct.returnValues;
-    if (receipt) {
-      enqueueSnackbar('Product delegated successfully', { variant: 'success' });
+    if (connected) {
+      const result = await contract?.methods
+        .delegateProduct(productId, newOwner)
+        .send({ from: address });
+      const receipt = result.events.DelegateProduct.returnValues;
+      if (receipt) {
+        enqueueSnackbar('Product delegated successfully', {
+          variant: 'success',
+        });
+      }
+    } else {
+      enqueueSnackbar('Connect wallet to continue', { variant: 'error' });
     }
   };
 
