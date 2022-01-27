@@ -31,6 +31,8 @@ Se valorará todo el background que considere colocar como tests, readmes, docum
 
 ## Notas
 
+- Es posible ver la última versión del proyecto deployado en Heroku en el siguiente link: https://product-factory.herokuapp.com/
+
 - Se eligió el nodo RPC de Chainstack Labs para la conexión con Polygon Mumbai Testnet debido a que el nodo público de Matic Vigil posee un rate limit de 40 llamadas por segundo. Asegurarse de tenerlo configurado en el apartado Networks de Metamask antes de correr el proyecto. Para otras opciones de nodos RPC ver el siguiente link: https://docs.superfluid.finance/superfluid/protocol-developers/networks/polygon-network-matic
 
 - Se utilizó una version más vieja de `react-scripts` para compilar debido a un problema de incompatibilidad con la última version de webpack que pedía polyfills para varios modulos que no son exclusivamente de uso web. Una solución consistía en eyectar la aplicación para modificar webpack, lo cual no está recomendado. La solución elegida (el downgrade) fue la elección mayoritaria de los usuarios del repositorio: https://github.com/facebook/create-react-app/issues/11756.
