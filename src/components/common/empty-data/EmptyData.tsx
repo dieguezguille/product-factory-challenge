@@ -23,7 +23,7 @@ const EmptyData: React.FC<EmptyDataProps> = ({
     {showIcon && (
       <HelpTwoToneIcon sx={{ width: '2em', height: '2em', opacity: '20%' }} />
     )}
-    <Typography variant="body1">No data to display.</Typography>
+    <Typography variant="body1">No data to display</Typography>
   </Stack>
 );
 

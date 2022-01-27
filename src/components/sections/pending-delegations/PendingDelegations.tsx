@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import {
   TableContainer,
   Paper,
@@ -12,34 +12,38 @@ import {
   Typography,
   Button,
 } from '@mui/material';
-import React, { useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import CheckIcon from '@mui/icons-material/Check';
+import { useSnackbar } from 'notistack';
 
 import useProductFactory from '../../../hooks/product-factory.hook';
 import { productFactoryContext } from '../../providers/ProductFactoryProvider';
 import EmptyData from '../../common/empty-data/EmptyData';
+import { walletProviderContext } from '../../providers/WalletProvider';
+import Forbidden from '../../common/forbidden/Forbidden';
 
 const PendingDelegations: React.FC = () => {
-  const { getAllProducts, getPendingDelegations, acceptProduct } =
-    useProductFactory();
-  const { products, pendingDelegations } = useContext(productFactoryContext);
+  const { enqueueSnackbar } = useSnackbar();
+  const { getPendingDelegations, acceptProduct } = useProductFactory();
+  const { pendingDelegations } = useContext(productFactoryContext);
+  const { connected } = useContext(walletProviderContext);
 
-  const handleClick = async (productId: number) => {
+  const handleAcceptProduct = async (productId: number) => {
     await acceptProduct(productId);
   };
 
-  const handleLoad = async () => {
-    await getAllProducts();
+  const handlePendingDelegations = () => {
+    console.log(connected);
+    if (connected) {
+      enqueueSnackbar('Refreshing...', { variant: 'info' });
+      getPendingDelegations();
+    } else {
+      enqueueSnackbar('Connect to Metamask first', { variant: 'info' });
+    }
   };
 
-  useEffect(() => {
-    if (products) {
-      getPendingDelegations();
-    }
-  }, [products]);
-
-  return (
+  return connected ? (
     <>
       <Typography
         textAlign="center"
@@ -49,15 +53,13 @@ const PendingDelegations: React.FC = () => {
       >
         Pending Delegations
       </Typography>
-
       <Button
         variant={'contained'}
         sx={{ marginBottom: '25px' }}
-        onClick={handleLoad}
+        onClick={getPendingDelegations}
       >
         Refresh
       </Button>
-
       {pendingDelegations && pendingDelegations.length > 0 ? (
         <TableContainer component={Paper}>
           <Table aria-label="collapsible table">
@@ -89,7 +91,7 @@ const PendingDelegations: React.FC = () => {
                       <Tooltip title="Accept">
                         <IconButton
                           aria-label="accept delegation"
-                          onClick={() => handleClick(product.id)}
+                          onClick={() => handleAcceptProduct(product.id)}
                         >
                           <CheckIcon />
                         </IconButton>
@@ -105,6 +107,8 @@ const PendingDelegations: React.FC = () => {
         <EmptyData />
       )}
     </>
+  ) : (
+    <Forbidden />
   );
 };
 

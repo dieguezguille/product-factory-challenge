@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { useCallback, useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { AbiItem } from 'web3-utils';
 import { useSnackbar } from 'notistack';
 
@@ -17,7 +16,7 @@ export type ProductFactoryHookReturnType = {
   getAllProducts: () => Promise<void>;
   createProduct: (name: string) => Promise<void>;
   delegateProduct: (productId: number, newOwner: string) => Promise<void>;
-  getPendingDelegations: () => void;
+  getPendingDelegations: () => Promise<void>;
   acceptProduct: (productId: number) => Promise<void>;
 };
 
@@ -34,7 +33,7 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
     setPendingDelegations,
   } = useContext(productFactoryContext);
 
-  const loadContract = useCallback(() => {
+  const loadContract = () => {
     if (web3Provider && !contract) {
       const loadedContract = new web3Provider.eth.Contract(
         ProductFactoryAbi as AbiItem[],
@@ -42,21 +41,26 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
       );
       setContract(loadedContract);
     }
-  }, [contract, enqueueSnackbar, web3Provider]);
+  };
 
-  const getProductsSize = useCallback(async (): Promise<number | void> => {
+  const getProductsSize = async (): Promise<number | void> => {
     const result: number = await contract?.methods.size().call();
     setProductsSize(result);
-  }, [contract]);
+  };
 
-  const getProductByIndex = useCallback(
-    async (index: number): Promise<IProduct | undefined> => {
-      const result = await contract?.methods.products(index).call();
-      const newProduct: IProduct = { ...result, id: index };
-      return newProduct;
-    },
-    [contract],
-  );
+  const getProductByIndex = async (
+    index: number,
+  ): Promise<IProduct | undefined> => {
+    if (!contract) {
+      enqueueSnackbar('ProductFactory contract not found', {
+        variant: 'error',
+      });
+      return undefined;
+    }
+    const result = await contract?.methods.products(index).call();
+    const newProduct: IProduct = { ...result, id: index };
+    return newProduct;
+  };
 
   const getAllProducts = async () => {
     const productPromises = [];
@@ -67,16 +71,15 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
     setProducts(results);
   };
 
-  const getPendingDelegations = useCallback(() => {
-    if (address) {
-      const delegations = products.filter(
-        (product) =>
-          product?.status.toString() === '1' &&
-          product.newOwner.toLowerCase() === address?.toLowerCase(),
-      );
-      setPendingDelegations(delegations);
-    }
-  }, [products]);
+  const getPendingDelegations = async () => {
+    await getAllProducts();
+    const delegations = products.filter(
+      (product) =>
+        product?.status.toString() === '1' &&
+        product.newOwner.toLowerCase() === address?.toLowerCase(),
+    );
+    setPendingDelegations(delegations);
+  };
 
   const createProduct = async (name: string) => {
     const result = await contract?.methods

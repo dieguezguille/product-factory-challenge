@@ -23,13 +23,14 @@ const useWalletProvider = (): WalletProviderHookReturnType => {
     setChain,
     web3Provider,
     setWeb3Provider,
+    setConnected,
   } = useContext(walletProviderContext);
 
-  const disconnect = useCallback(() => {
+  const disconnect = () => {
     setAddress(undefined);
     setChain(undefined);
-    enqueueSnackbar('Disconnected from MetaMask', { variant: 'info' }); // Fake disconnect
-  }, [enqueueSnackbar]);
+    setConnected(false);
+  };
 
   const checkChain = () => {
     if (chain && chain !== process.env.REACT_APP_TESTNET_ID) {
@@ -57,7 +58,7 @@ const useWalletProvider = (): WalletProviderHookReturnType => {
       method: 'eth_requestAccounts',
     });
     await getWalletData();
-    enqueueSnackbar('Connected to MetaMask', { variant: 'info' });
+    setConnected(true);
   };
 
   useEffect(() => {
@@ -81,10 +82,9 @@ const useWalletProvider = (): WalletProviderHookReturnType => {
       };
 
       const handleDisconnect = (error: { code: number; message: string }) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
         disconnect();
-        enqueueSnackbar(`Disconnected from Metamask: ${error.message}`, {
-          variant: 'info',
-        });
       };
 
       window.ethereum.on('accountsChanged', handleAccountsChanged);

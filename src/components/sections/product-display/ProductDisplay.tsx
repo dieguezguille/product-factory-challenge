@@ -26,7 +26,7 @@ const ProductDisplay: React.FC = () => {
   const { getAllProducts } = useProductFactory();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(0);
-  const { products } = useContext(productFactoryContext);
+  const { products, contract } = useContext(productFactoryContext);
 
   const handleDialogOpen = (id: number) => {
     setSelectedProductId(id);
@@ -42,8 +42,10 @@ const ProductDisplay: React.FC = () => {
   };
 
   useEffect(() => {
-    getAllProducts();
-  }, []);
+    if (contract) {
+      getAllProducts();
+    }
+  }, [contract]);
 
   return (
     <>

@@ -2,12 +2,15 @@
 import { Stack, Typography, Grid, Button, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import React from 'react';
+import React, { useContext } from 'react';
 
 import useProductFactory from '../../../hooks/product-factory.hook';
+import { walletProviderContext } from '../../providers/WalletProvider';
+import Forbidden from '../../common/forbidden/Forbidden';
 
 const ProductCreation: React.FC = () => {
   const { createProduct } = useProductFactory();
+  const { connected } = useContext(walletProviderContext);
   const handleSubmit = async (values: { name: string }) => {
     await createProduct(values.name);
   };
@@ -25,7 +28,7 @@ const ProductCreation: React.FC = () => {
     onSubmit: handleSubmit,
   });
 
-  return (
+  return connected ? (
     <Stack spacing={2}>
       <Typography textAlign="center" variant="h5" component="h2">
         Add Product
@@ -57,6 +60,8 @@ const ProductCreation: React.FC = () => {
         </Grid>
       </Grid>
     </Stack>
+  ) : (
+    <Forbidden />
   );
 };
 
