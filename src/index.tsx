@@ -12,6 +12,7 @@ import { createTheme } from '@mui/material';
 import App from './App';
 import ProductFactoryProvider from './components/providers/ProductFactoryProvider';
 import WalletProvider from './components/providers/WalletProvider';
+import AppProvider from './components/providers/AppProvider';
 
 const darkTheme = createTheme({
   palette: {
@@ -22,15 +23,17 @@ const darkTheme = createTheme({
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <SnackbarProvider maxSnack={5}>
-        <WalletProvider>
-          <ProductFactoryProvider>
-            <ThemeProvider theme={darkTheme}>
-              <App />
-            </ThemeProvider>
-          </ProductFactoryProvider>
-        </WalletProvider>
-      </SnackbarProvider>
+      <AppProvider>
+        <SnackbarProvider maxSnack={5}>
+          <WalletProvider>
+            <ProductFactoryProvider>
+              <ThemeProvider theme={darkTheme}>
+                <App />
+              </ThemeProvider>
+            </ProductFactoryProvider>
+          </WalletProvider>
+        </SnackbarProvider>
+      </AppProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root'),

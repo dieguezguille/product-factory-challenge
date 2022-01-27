@@ -12,6 +12,7 @@ import ProductFactoryAbi from '../abis/ProductFactory.json';
 import { IProduct } from '../interfaces/product.interface';
 import { productFactoryContext } from '../components/providers/ProductFactoryProvider';
 import { walletProviderContext } from '../components/providers/WalletProvider';
+import { appContext } from '../components/providers/AppProvider';
 
 export type ProductFactoryHookReturnType = {
   getAllProducts: () => Promise<Array<IProduct | undefined>>;
@@ -23,6 +24,7 @@ export type ProductFactoryHookReturnType = {
 
 const useProductFactory = (): ProductFactoryHookReturnType => {
   const { enqueueSnackbar } = useSnackbar();
+  const { setIsLoading } = useContext(appContext);
   const { web3Provider, address, connected } = useContext(
     walletProviderContext,
   );
@@ -65,6 +67,7 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
   };
 
   const getAllProducts = async () => {
+    setIsLoading(true);
     const size = await getProductsSize();
     const productPromises = [];
     for (let index = 0; index < size; index += 1) {
@@ -74,10 +77,12 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
       productPromises,
     );
     setProducts(results);
+    setIsLoading(false);
     return results;
   };
 
   const getPendingDelegations = async () => {
+    setIsLoading(true);
     const latestProducts = await getAllProducts();
     const delegations = latestProducts.filter(
       (product) =>
@@ -85,9 +90,11 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
         product.newOwner.toLowerCase() === address?.toLowerCase(),
     );
     setPendingDelegations(delegations);
+    setIsLoading(false);
   };
 
   const createProduct = async (name: string) => {
+    setIsLoading(true);
     if (connected) {
       const result = await contract?.methods
         .createProduct(name)
@@ -99,9 +106,11 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
     } else {
       enqueueSnackbar('Connect wallet to continue', { variant: 'error' });
     }
+    setIsLoading(false);
   };
 
   const delegateProduct = async (productId: number, newOwner: string) => {
+    setIsLoading(true);
     if (connected) {
       const result = await contract?.methods
         .delegateProduct(productId, newOwner)
@@ -115,9 +124,11 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
     } else {
       enqueueSnackbar('Connect wallet to continue', { variant: 'error' });
     }
+    setIsLoading(false);
   };
 
   const acceptProduct = async (productId: number) => {
+    setIsLoading(true);
     if (connected) {
       const result = await contract?.methods
         .acceptProduct(productId)
@@ -131,6 +142,7 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
     } else {
       enqueueSnackbar('Connect wallet to continue', { variant: 'error' });
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
