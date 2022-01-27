@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -13,7 +14,7 @@ import { productFactoryContext } from '../components/providers/ProductFactoryPro
 import { walletProviderContext } from '../components/providers/WalletProvider';
 
 export type ProductFactoryHookReturnType = {
-  getAllProducts: () => Promise<void>;
+  getAllProducts: () => Promise<Array<IProduct | undefined>>;
   createProduct: (name: string) => Promise<void>;
   delegateProduct: (productId: number, newOwner: string) => Promise<void>;
   getPendingDelegations: () => Promise<void>;
@@ -26,9 +27,7 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
   const {
     contract,
     setContract,
-    products,
     setProducts,
-    productsSize,
     setProductsSize,
     setPendingDelegations,
   } = useContext(productFactoryContext);
@@ -64,20 +63,21 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
   };
 
   const getAllProducts = async () => {
-    enqueueSnackbar('Getting products...', { variant: 'info' });
     const size = await getProductsSize();
     const productPromises = [];
     for (let index = 0; index < size; index += 1) {
       productPromises.push(getProductByIndex(index));
     }
-    const results = await Promise.all(productPromises);
+    const results: Array<IProduct | undefined> = await Promise.all(
+      productPromises,
+    );
     setProducts(results);
+    return results;
   };
 
   const getPendingDelegations = async () => {
-    enqueueSnackbar('Getting pending delegations...', { variant: 'info' });
-    await getAllProducts();
-    const delegations = products.filter(
+    const latestProducts = await getAllProducts();
+    const delegations = latestProducts.filter(
       (product) =>
         product?.status.toString() === '1' &&
         product.newOwner.toLowerCase() === address?.toLowerCase(),
@@ -86,7 +86,6 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
   };
 
   const createProduct = async (name: string) => {
-    enqueueSnackbar('Creating product...', { variant: 'info' });
     const result = await contract?.methods
       .createProduct(name)
       .send({ from: address });
@@ -97,7 +96,6 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
   };
 
   const delegateProduct = async (productId: number, newOwner: string) => {
-    enqueueSnackbar('Delegating product...', { variant: 'info' });
     const result = await contract?.methods
       .delegateProduct(productId, newOwner)
       .send({ from: address });
@@ -108,7 +106,6 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
   };
 
   const acceptProduct = async (productId: number) => {
-    enqueueSnackbar('Accepting product...', { variant: 'info' });
     const result = await contract?.methods
       .acceptProduct(productId)
       .send({ from: address });

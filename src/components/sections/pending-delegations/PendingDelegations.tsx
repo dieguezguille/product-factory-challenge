@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import {
   TableContainer,
@@ -12,10 +13,9 @@ import {
   Typography,
   Button,
 } from '@mui/material';
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import CheckIcon from '@mui/icons-material/Check';
-import { useSnackbar } from 'notistack';
 
 import useProductFactory from '../../../hooks/product-factory.hook';
 import { productFactoryContext } from '../../providers/ProductFactoryProvider';
@@ -24,24 +24,19 @@ import { walletProviderContext } from '../../providers/WalletProvider';
 import Forbidden from '../../common/forbidden/Forbidden';
 
 const PendingDelegations: React.FC = () => {
-  const { enqueueSnackbar } = useSnackbar();
   const { getPendingDelegations, acceptProduct } = useProductFactory();
-  const { pendingDelegations } = useContext(productFactoryContext);
+  const { contract, pendingDelegations } = useContext(productFactoryContext);
   const { connected } = useContext(walletProviderContext);
 
   const handleAcceptProduct = async (productId: number) => {
     await acceptProduct(productId);
   };
 
-  const handlePendingDelegations = () => {
-    console.log(connected);
-    if (connected) {
-      enqueueSnackbar('Refreshing...', { variant: 'info' });
+  useEffect(() => {
+    if (contract && connected) {
       getPendingDelegations();
-    } else {
-      enqueueSnackbar('Connect to Metamask first', { variant: 'info' });
     }
-  };
+  }, [contract, connected]);
 
   return connected ? (
     <>
