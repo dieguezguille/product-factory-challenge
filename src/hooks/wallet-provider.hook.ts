@@ -27,9 +27,9 @@ const useWalletProvider = (): WalletProviderHookReturnType => {
   } = useContext(walletProviderContext);
 
   const disconnect = () => {
+    setConnected(false);
     setAddress(undefined);
     setChain(undefined);
-    setConnected(false);
   };
 
   const checkChain = () => {
@@ -74,7 +74,11 @@ const useWalletProvider = (): WalletProviderHookReturnType => {
   useEffect(() => {
     if (window.ethereum?.on) {
       const handleAccountsChanged = (accounts: string[]) => {
-        setAddress(accounts[0]);
+        if (accounts && accounts.length > 0) {
+          setAddress(accounts[0]);
+        } else {
+          disconnect();
+        }
       };
 
       const handleChainChanged = () => {
