@@ -16,6 +16,7 @@ import {
 import React, { useContext, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import CheckIcon from '@mui/icons-material/Check';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 import useProductFactory from '../../../hooks/product-factory.hook';
 import { productFactoryContext } from '../../providers/ProductFactoryProvider';
@@ -51,6 +52,7 @@ const PendingDelegations: React.FC = () => {
       <Button
         variant={'contained'}
         sx={{ marginBottom: '25px' }}
+        startIcon={<RefreshIcon />}
         onClick={getPendingDelegations}
       >
         Refresh

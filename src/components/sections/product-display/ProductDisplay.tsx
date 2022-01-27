@@ -16,6 +16,7 @@ import {
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import IosShareIcon from '@mui/icons-material/IosShare';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 import DelegationDialog from '../../common/delegation-dialog/DelegationDialog';
 import useProductFactory from '../../../hooks/product-factory.hook';
@@ -61,6 +62,7 @@ const ProductDisplay: React.FC = () => {
       <Button
         variant={'contained'}
         sx={{ marginBottom: '25px' }}
+        startIcon={<RefreshIcon />}
         onClick={handleRefresh}
       >
         Refresh
