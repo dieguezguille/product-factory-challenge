@@ -20,6 +20,18 @@ No es necesario realizar todos los puntos, si los realiza es mejor y si tiene qu
 
 Se valorará todo el background que considere colocar como tests, readmes, documentación, etc.
 
-# Notas
+## Instrucciones
+
+1. Clonar el repositorio
+2. Instalar dependencias usando 'yarn'
+3. Correr el proyecto usando 'yarn start'
+
+## Notas
 
 - Se utilizó una version más vieja de react-scripts para compilar debido a un problema de incompatibilidad con la última version de webpack que pedía polyfills para varios modulos que no son exclusivamente de uso web. Una solución consistía en eyectar la aplicación para modificar webpack, lo cual no está recomendado. La solución elegida (el downgrade) fue la elección mayoritaria de los usuarios del repositorio: https://github.com/facebook/create-react-app/issues/11756.
+
+- La librería 'foundry' utilizada para facilitar las configuraciones del proyecto configuró por defecto que el final de línea de los archivos sea LF en lugar de CRLF. Al compilar en Windows esto daba error y la compilación se detenía. Para solucionarlo ejecuté los siguientes comandos:
+
+  1. git config core.autocrlf false
+  2. git rm --cached -r .
+  3. git reset --hard
