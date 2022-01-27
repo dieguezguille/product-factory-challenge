@@ -18,6 +18,7 @@ import CheckIcon from '@mui/icons-material/Check';
 
 import useProductFactory from '../../../hooks/product-factory.hook';
 import { productFactoryContext } from '../../providers/ProductFactoryProvider';
+import EmptyData from '../../common/empty-data/EmptyData';
 
 const PendingDelegations: React.FC = () => {
   const { getAllProducts, getPendingDelegations, acceptProduct } =
@@ -57,21 +58,21 @@ const PendingDelegations: React.FC = () => {
         Refresh
       </Button>
 
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell align="center">Status</TableCell>
-              <TableCell align="right">Owner</TableCell>
-              <TableCell align="right">New Owner</TableCell>
-              <TableCell align="center">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {pendingDelegations ? (
-              pendingDelegations.map((product) =>
+      {pendingDelegations && pendingDelegations.length > 0 ? (
+        <TableContainer component={Paper}>
+          <Table aria-label="collapsible table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">ID</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell align="center">Status</TableCell>
+                <TableCell align="right">Owner</TableCell>
+                <TableCell align="right">New Owner</TableCell>
+                <TableCell align="center">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {pendingDelegations.map((product) =>
                 product ? (
                   <TableRow
                     key={uuidv4()}
@@ -96,18 +97,13 @@ const PendingDelegations: React.FC = () => {
                     </TableCell>
                   </TableRow>
                 ) : null,
-              )
-            ) : (
-              <TableRow
-                key={uuidv4()}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell align="center">No pending delegations</TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <EmptyData />
+      )}
     </>
   );
 };
