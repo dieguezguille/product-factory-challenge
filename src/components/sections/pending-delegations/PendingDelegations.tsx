@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   TableContainer,
   Paper,
@@ -9,24 +10,33 @@ import {
   IconButton,
   Tooltip,
   Typography,
+  Button,
 } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import CheckIcon from '@mui/icons-material/Check';
 
 import useProductFactory from '../../../hooks/product-factory.hook';
+import { productFactoryContext } from '../../providers/ProductFactoryProvider';
 
 const PendingDelegations: React.FC = () => {
-  const { products, pendingDelegations, getPendingDelegations, acceptProduct } =
+  const { getAllProducts, getPendingDelegations, acceptProduct } =
     useProductFactory();
+  const { products, pendingDelegations } = useContext(productFactoryContext);
 
   const handleClick = async (productId: number) => {
     await acceptProduct(productId);
   };
 
+  const handleLoad = async () => {
+    await getAllProducts();
+  };
+
   useEffect(() => {
-    getPendingDelegations();
-  }, [products, getPendingDelegations]);
+    if (products) {
+      getPendingDelegations();
+    }
+  }, [products]);
 
   return (
     <>
@@ -38,6 +48,15 @@ const PendingDelegations: React.FC = () => {
       >
         Pending Delegations
       </Typography>
+
+      <Button
+        variant={'contained'}
+        sx={{ marginBottom: '25px' }}
+        onClick={handleLoad}
+      >
+        Load Pending Delegations
+      </Button>
+
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
           <TableHead>
@@ -51,30 +70,41 @@ const PendingDelegations: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {pendingDelegations.map((product) => (
+            {pendingDelegations ? (
+              pendingDelegations.map((product) =>
+                product ? (
+                  <TableRow
+                    key={uuidv4()}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell align="center">{product.id}</TableCell>
+                    <TableCell component="th" scope="row">
+                      {product.name}
+                    </TableCell>
+                    <TableCell align="center">{product.status}</TableCell>
+                    <TableCell align="right">{product.owner}</TableCell>
+                    <TableCell align="right">{product.newOwner}</TableCell>
+                    <TableCell align="center" padding="checkbox">
+                      <Tooltip title="Accept">
+                        <IconButton
+                          aria-label="accept delegation"
+                          onClick={() => handleClick(product.id)}
+                        >
+                          <CheckIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                ) : null,
+              )
+            ) : (
               <TableRow
                 key={uuidv4()}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                <TableCell align="center">{product.id}</TableCell>
-                <TableCell component="th" scope="row">
-                  {product.name}
-                </TableCell>
-                <TableCell align="center">{product.status}</TableCell>
-                <TableCell align="right">{product.owner}</TableCell>
-                <TableCell align="right">{product.newOwner}</TableCell>
-                <TableCell align="center" padding="checkbox">
-                  <Tooltip title="Accept">
-                    <IconButton
-                      aria-label="accept delegation"
-                      onClick={() => handleClick(product.id)}
-                    >
-                      <CheckIcon />
-                    </IconButton>
-                  </Tooltip>
-                </TableCell>
+                <TableCell align="center">No pending delegations</TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>

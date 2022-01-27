@@ -1,26 +1,30 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useSnackbar } from 'notistack';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import Web3 from 'web3';
 
-type WalletProviderReturnType = {
+import { walletProviderContext } from '../components/providers/WalletProvider';
+
+export type WalletProviderHookReturnType = {
   connect: () => Promise<void>;
   disconnect: () => void;
-  address: string | undefined;
-  chain: string | undefined;
-  web3Provider: Web3 | undefined;
 };
 
-const useWalletProvider = (): WalletProviderReturnType => {
+const useWalletProvider = (): WalletProviderHookReturnType => {
   const { enqueueSnackbar } = useSnackbar();
-  const [address, setAddress] = useState<string | undefined>(undefined);
-  const [chain, setChain] = useState<string | undefined>(undefined);
-  const [web3Provider, setWeb3Provider] = useState<Web3 | undefined>(undefined);
+
+  const {
+    address,
+    setAddress,
+    chain,
+    setChain,
+    web3Provider,
+    setWeb3Provider,
+  } = useContext(walletProviderContext);
 
   const disconnect = useCallback(() => {
     setAddress(undefined);
@@ -64,15 +68,10 @@ const useWalletProvider = (): WalletProviderReturnType => {
     }
   }, [window.ethereum]);
 
-  // useEffect(() => {
-  //   getWalletData();
-  // }, [web3Provider, getWalletData]);
-
   useEffect(() => {
     checkChain();
   }, [address, chain]);
 
-  // Subscribe to Metamask events
   useEffect(() => {
     if (window.ethereum?.on) {
       const handleAccountsChanged = (accounts: string[]) => {
@@ -108,7 +107,7 @@ const useWalletProvider = (): WalletProviderReturnType => {
     return () => {};
   }, []);
 
-  return { connect, disconnect, address, chain, web3Provider };
+  return { connect, disconnect };
 };
 
 export default useWalletProvider;

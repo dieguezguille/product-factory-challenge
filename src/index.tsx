@@ -8,12 +8,18 @@ import { BrowserRouter } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 
 import App from './App';
+import ProductFactoryProvider from './components/providers/ProductFactoryProvider';
+import WalletProvider from './components/providers/WalletProvider';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <SnackbarProvider maxSnack={5}>
-        <App />
+        <WalletProvider>
+          <ProductFactoryProvider>
+            <App />
+          </ProductFactoryProvider>
+        </WalletProvider>
       </SnackbarProvider>
     </BrowserRouter>
   </React.StrictMode>,

@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import {
   TableContainer,
   Paper,
@@ -9,19 +11,21 @@ import {
   IconButton,
   Tooltip,
   Typography,
+  Button,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import IosShareIcon from '@mui/icons-material/IosShare';
 
-import useProductFactory from '../../../hooks/product-factory.hook';
 import DelegationDialog from '../../common/delegation-dialog/DelegationDialog';
+import useProductFactory from '../../../hooks/product-factory.hook';
+import { productFactoryContext } from '../../providers/ProductFactoryProvider';
 
 const ProductDisplay: React.FC = () => {
-  const { products } = useProductFactory();
-
+  const { getAllProducts } = useProductFactory();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(0);
+  const { products } = useContext(productFactoryContext);
 
   const handleDialogOpen = (id: number) => {
     setSelectedProductId(id);
@@ -30,6 +34,10 @@ const ProductDisplay: React.FC = () => {
 
   const handleDialogClose = () => {
     setDialogOpen(false);
+  };
+
+  const loadProducts = async () => {
+    await getAllProducts();
   };
 
   return (
@@ -42,6 +50,14 @@ const ProductDisplay: React.FC = () => {
       >
         All Products
       </Typography>
+
+      <Button
+        variant={'contained'}
+        sx={{ marginBottom: '25px' }}
+        onClick={loadProducts}
+      >
+        Load Products
+      </Button>
 
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
@@ -56,30 +72,32 @@ const ProductDisplay: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map((product) => (
-              <TableRow
-                key={uuidv4()}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell align="center">{product.id}</TableCell>
-                <TableCell component="th" scope="row">
-                  {product.name}
-                </TableCell>
-                <TableCell align="center">{product.status}</TableCell>
-                <TableCell align="right">{product.owner}</TableCell>
-                <TableCell align="right">{product.newOwner}</TableCell>
-                <TableCell align="center" padding="checkbox">
-                  <Tooltip title="Delegate">
-                    <IconButton
-                      aria-label="delegate"
-                      onClick={() => handleDialogOpen(product.id)}
-                    >
-                      <IosShareIcon />
-                    </IconButton>
-                  </Tooltip>
-                </TableCell>
-              </TableRow>
-            ))}
+            {products.map((product) =>
+              product ? (
+                <TableRow
+                  key={uuidv4()}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell align="center">{product.id}</TableCell>
+                  <TableCell component="th" scope="row">
+                    {product.name}
+                  </TableCell>
+                  <TableCell align="center">{product.status}</TableCell>
+                  <TableCell align="right">{product.owner}</TableCell>
+                  <TableCell align="right">{product.newOwner}</TableCell>
+                  <TableCell align="center" padding="checkbox">
+                    <Tooltip title="Delegate">
+                      <IconButton
+                        aria-label="delegate"
+                        onClick={() => handleDialogOpen(product.id)}
+                      >
+                        <IosShareIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              ) : null,
+            )}
           </TableBody>
         </Table>
       </TableContainer>

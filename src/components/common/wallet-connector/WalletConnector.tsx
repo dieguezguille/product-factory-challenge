@@ -4,9 +4,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { Button, ButtonProps, Tooltip } from '@mui/material';
-import React from 'react';
+import React, { useContext } from 'react';
 
 import useWalletProvider from '../../../hooks/wallet-provider.hook';
+import { walletProviderContext } from '../../providers/WalletProvider';
 
 type WalletConnectorProps = {
   tooltipConnected: string;
@@ -18,7 +19,8 @@ export const WalletConnector: React.FC<WalletConnectorProps> = ({
   tooltipDisconnected,
   ...rest
 }) => {
-  const { connect, disconnect, address } = useWalletProvider();
+  const { connect, disconnect } = useWalletProvider();
+  const { address } = useContext(walletProviderContext);
 
   const getWalletaddress = (walletAddress: string) =>
     `${String(walletAddress).substring(0, 6)}...${String(

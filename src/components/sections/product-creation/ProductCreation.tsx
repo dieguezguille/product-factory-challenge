@@ -4,12 +4,11 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import React from 'react';
 
-import { ProductType } from '../../../types/product.type';
 import useProductFactory from '../../../hooks/product-factory.hook';
 
 const ProductCreation: React.FC = () => {
   const { createProduct } = useProductFactory();
-  const handleSubmit = async (values: ProductType) => {
+  const handleSubmit = async (values: { name: string }) => {
     await createProduct(values.name);
   };
 
