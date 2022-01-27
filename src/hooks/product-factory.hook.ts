@@ -23,7 +23,9 @@ export type ProductFactoryHookReturnType = {
 
 const useProductFactory = (): ProductFactoryHookReturnType => {
   const { enqueueSnackbar } = useSnackbar();
-  const { web3Provider, address } = useContext(walletProviderContext);
+  const { web3Provider, address, connected } = useContext(
+    walletProviderContext,
+  );
   const {
     contract,
     setContract,
@@ -86,12 +88,16 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
   };
 
   const createProduct = async (name: string) => {
-    const result = await contract?.methods
-      .createProduct(name)
-      .send({ from: address });
-    const receipt = result.events.NewProduct.returnValues;
-    if (receipt) {
-      enqueueSnackbar('Product created successfully', { variant: 'success' });
+    if (connected) {
+      const result = await contract?.methods
+        .createProduct(name)
+        .send({ from: address });
+      const receipt = result.events.NewProduct.returnValues;
+      if (receipt) {
+        enqueueSnackbar('Product created successfully', { variant: 'success' });
+      }
+    } else {
+      enqueueSnackbar('Connect wallet to continue', { variant: 'error' });
     }
   };
 
