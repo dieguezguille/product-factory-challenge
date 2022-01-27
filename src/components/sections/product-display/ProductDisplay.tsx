@@ -13,7 +13,7 @@ import {
   Typography,
   Button,
 } from '@mui/material';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import IosShareIcon from '@mui/icons-material/IosShare';
 
@@ -36,9 +36,13 @@ const ProductDisplay: React.FC = () => {
     setDialogOpen(false);
   };
 
-  const loadProducts = async () => {
-    await getAllProducts();
+  const handleRefresh = () => {
+    getAllProducts();
   };
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
 
   return (
     <>
@@ -54,9 +58,9 @@ const ProductDisplay: React.FC = () => {
       <Button
         variant={'contained'}
         sx={{ marginBottom: '25px' }}
-        onClick={loadProducts}
+        onClick={handleRefresh}
       >
-        Load Products
+        Refresh
       </Button>
 
       <TableContainer component={Paper}>
