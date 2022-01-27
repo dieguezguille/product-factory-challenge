@@ -1,27 +1,21 @@
-import {
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  IconButton,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import React, { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import { Typography, Button } from '@mui/material';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import IosShareIcon from '@mui/icons-material/IosShare';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
-import useProductFactory from '../../../hooks/product-factory.hook';
 import DelegationDialog from '../../common/delegation-dialog/DelegationDialog';
+import useProductFactory from '../../../hooks/product-factory.hook';
+import { productFactoryContext } from '../../providers/ProductFactoryProvider';
+import EmptyData from '../../common/empty-data/EmptyData';
+import EnhancedTable from '../../common/enhanced-table/EnhancedTable';
 
 const ProductDisplay: React.FC = () => {
-  const { products } = useProductFactory();
-
+  const { getAllProducts } = useProductFactory();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(0);
+  const { products, contract } = useContext(productFactoryContext);
 
   const handleDialogOpen = (id: number) => {
     setSelectedProductId(id);
@@ -31,6 +25,16 @@ const ProductDisplay: React.FC = () => {
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
+
+  const handleRefresh = useCallback(() => {
+    getAllProducts();
+  }, [getAllProducts]);
+
+  useEffect(() => {
+    if (contract) {
+      getAllProducts();
+    }
+  }, [contract]);
 
   return (
     <>
@@ -43,46 +47,27 @@ const ProductDisplay: React.FC = () => {
         All Products
       </Typography>
 
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell align="center">Status</TableCell>
-              <TableCell align="right">Owner</TableCell>
-              <TableCell align="right">New Owner</TableCell>
-              <TableCell align="center">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {products.map((product) => (
-              <TableRow
-                key={uuidv4()}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell align="center">{product.id}</TableCell>
-                <TableCell component="th" scope="row">
-                  {product.name}
-                </TableCell>
-                <TableCell align="center">{product.status}</TableCell>
-                <TableCell align="right">{product.owner}</TableCell>
-                <TableCell align="right">{product.newOwner}</TableCell>
-                <TableCell align="center" padding="checkbox">
-                  <Tooltip title="Delegate">
-                    <IconButton
-                      aria-label="delegate"
-                      onClick={() => handleDialogOpen(product.id)}
-                    >
-                      <IosShareIcon />
-                    </IconButton>
-                  </Tooltip>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Button
+        variant={'contained'}
+        sx={{ marginBottom: '25px' }}
+        startIcon={<RefreshIcon />}
+        onClick={handleRefresh}
+      >
+        Refresh
+      </Button>
+
+      {products && products.length > 0 ? (
+        <EnhancedTable
+          initialPage={0}
+          initialRowsPerPage={10}
+          products={products}
+          action={handleDialogOpen}
+          actionIcon={<IosShareIcon />}
+          actionTooltip="Delegate"
+        />
+      ) : (
+        <EmptyData />
+      )}
 
       <DelegationDialog
         isOpen={dialogOpen}
