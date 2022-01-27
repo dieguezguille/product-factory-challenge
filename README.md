@@ -24,7 +24,9 @@ Se valorará todo el background que considere colocar como tests, readmes, docum
 
 1. Clonar el repositorio
 2. Instalar dependencias usando 'yarn'
-3. Correr el proyecto usando 'yarn start'
+3. Crear archivo .env siguiendo el ejemplo del archivo .env.example
+4. Colocar '0x13881' como valor de chain_id y el address del contrato en contract_address
+5. Correr el proyecto usando 'yarn start'
 
 ## Notas
 
