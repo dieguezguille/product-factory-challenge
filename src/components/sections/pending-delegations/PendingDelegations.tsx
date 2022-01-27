@@ -54,7 +54,7 @@ const PendingDelegations: React.FC = () => {
         sx={{ marginBottom: '25px' }}
         onClick={handleLoad}
       >
-        Load Pending Delegations
+        Refresh
       </Button>
 
       <TableContainer component={Paper}>

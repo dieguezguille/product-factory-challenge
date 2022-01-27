@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -64,7 +63,6 @@ const useWalletProvider = (): WalletProviderHookReturnType => {
   useEffect(() => {
     if (window.ethereum && !web3Provider) {
       setWeb3Provider(new Web3(window.ethereum));
-      console.log('Injected Web3 Provider');
     }
   }, [window.ethereum]);
 
