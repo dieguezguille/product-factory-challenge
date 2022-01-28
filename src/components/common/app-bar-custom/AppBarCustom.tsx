@@ -33,7 +33,7 @@ const AppBarCustom: React.FC<AppBarProps> = (props) => {
   return (
     <AppBar
       position="fixed"
-      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      sx={{ zIndex: (theme) => theme.zIndex.snackbar - 1 }}
     >
       <Toolbar>
         <IconButton

@@ -8,7 +8,7 @@ const Loader: React.FC = () => {
   const { isLoading } = React.useContext(appContext);
   return (
     <Backdrop
-      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.snackbar - 1 }}
       open={isLoading}
     >
       <CircularProgress color="inherit" />
