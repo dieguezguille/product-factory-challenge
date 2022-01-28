@@ -1,4 +1,4 @@
-# Descripción del Challenge
+# Product Factory Challenge
 
 Se desea tener una aplicación (dApp) donde se integre el smart contract `ProductFactory` y que a través de ella se puedan realizar transacciones con Metamask:
 
@@ -14,7 +14,7 @@ El smart contract `ProductFactory` se encuentra en la Testnet Mumbai de Polygon 
 
   - `0xd9E0b2C0724F3a01AaECe3C44F8023371f845196`
 
-La dapp debe desarrollarse con `ReactJS` y la librería `web3.js`
+La dApp debe desarrollarse con `ReactJS` y la librería `web3.js`
 
 No es necesario realizar todos los puntos, si los realiza es mejor y si tiene que optar por priorizar asuma que a menor valor numérico en el listado mayor prioridad
 
