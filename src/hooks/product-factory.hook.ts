@@ -15,6 +15,8 @@ import { productFactoryContext } from '../components/providers/ProductFactoryPro
 import { walletProviderContext } from '../components/providers/WalletProvider';
 import { appContext } from '../components/providers/AppProvider';
 
+import useMetamaskUtils from './metamask-utils.hook';
+
 export type ProductFactoryHookReturnType = {
   getAllProducts: () => Promise<Array<IProduct | undefined> | undefined>;
   createProduct: (name: string) => Promise<void>;
@@ -24,6 +26,7 @@ export type ProductFactoryHookReturnType = {
 };
 
 const useProductFactory = (): ProductFactoryHookReturnType => {
+  const { isMetamaskError } = useMetamaskUtils();
   const { enqueueSnackbar } = useSnackbar();
   const { setIsLoading } = useContext(appContext);
   const { web3Provider, address, connected } = useContext(
@@ -81,7 +84,11 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
       setProducts(results);
       return results;
     } catch (error) {
-      enqueueSnackbar('Operation failed', { variant: 'error' });
+      if (isMetamaskError(error) && error.code === 4001) {
+        enqueueSnackbar('Transaction rejected', { variant: 'error' });
+      } else {
+        enqueueSnackbar('Operation failed', { variant: 'error' });
+      }
       console.log('Get All Products Error: ', error);
       return undefined;
     } finally {
@@ -103,7 +110,11 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
       );
       setPendingDelegations(delegations);
     } catch (error) {
-      enqueueSnackbar('Operation failed', { variant: 'error' });
+      if (isMetamaskError(error) && error.code === 4001) {
+        enqueueSnackbar('Transaction rejected', { variant: 'error' });
+      } else {
+        enqueueSnackbar('Operation failed', { variant: 'error' });
+      }
       console.log('Pending Delegations Error: ', error);
     } finally {
       setIsLoading(false);
@@ -127,7 +138,11 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
         enqueueSnackbar('Connect wallet to continue', { variant: 'error' });
       }
     } catch (error) {
-      enqueueSnackbar('Operation failed', { variant: 'error' });
+      if (isMetamaskError(error) && error.code === 4001) {
+        enqueueSnackbar('Transaction rejected', { variant: 'error' });
+      } else {
+        enqueueSnackbar('Operation failed', { variant: 'error' });
+      }
       console.log('Create Product Error: ', error);
     } finally {
       setIsLoading(false);
@@ -151,7 +166,11 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
         enqueueSnackbar('Connect wallet to continue', { variant: 'error' });
       }
     } catch (error) {
-      enqueueSnackbar('Operation failed', { variant: 'error' });
+      if (isMetamaskError(error) && error.code === 4001) {
+        enqueueSnackbar('Transaction rejected', { variant: 'error' });
+      } else {
+        enqueueSnackbar('Operation failed', { variant: 'error' });
+      }
       console.log('Delegate Product Error: ', error);
     } finally {
       setIsLoading(false);
@@ -175,7 +194,11 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
         enqueueSnackbar('Connect wallet to continue', { variant: 'error' });
       }
     } catch (error) {
-      enqueueSnackbar('Operation failed', { variant: 'error' });
+      if (isMetamaskError(error) && error.code === 4001) {
+        enqueueSnackbar('Transaction rejected', { variant: 'error' });
+      } else {
+        enqueueSnackbar('Operation failed', { variant: 'error' });
+      }
       console.log('Delegate Product Error: ', error);
     } finally {
       setIsLoading(false);
