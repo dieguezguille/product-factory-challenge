@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -6,6 +7,7 @@ import { useSnackbar } from 'notistack';
 import { useCallback, useContext, useEffect } from 'react';
 import Web3 from 'web3';
 
+import { appContext } from '../components/providers/AppProvider';
 import { walletProviderContext } from '../components/providers/WalletProvider';
 
 export type WalletProviderHookReturnType = {
@@ -15,6 +17,7 @@ export type WalletProviderHookReturnType = {
 
 const useWalletProvider = (): WalletProviderHookReturnType => {
   const { enqueueSnackbar } = useSnackbar();
+  const { setShouldRefresh } = useContext(appContext);
 
   const {
     address,
@@ -59,6 +62,7 @@ const useWalletProvider = (): WalletProviderHookReturnType => {
     });
     await getWalletData();
     setConnected(true);
+    setShouldRefresh(true);
   };
 
   useEffect(() => {
@@ -70,6 +74,12 @@ const useWalletProvider = (): WalletProviderHookReturnType => {
   useEffect(() => {
     checkChain();
   }, [address, chain]);
+
+  useEffect(() => {
+    if (address) {
+      setShouldRefresh(true);
+    }
+  }, [address]);
 
   useEffect(() => {
     if (window.ethereum?.on) {
@@ -86,7 +96,6 @@ const useWalletProvider = (): WalletProviderHookReturnType => {
       };
 
       const handleDisconnect = (error: { code: number; message: string }) => {
-        // eslint-disable-next-line no-console
         console.log(error);
         disconnect();
       };
