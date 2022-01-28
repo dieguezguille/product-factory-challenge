@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-floating-promises */
@@ -14,8 +15,10 @@ import { productFactoryContext } from '../components/providers/ProductFactoryPro
 import { walletProviderContext } from '../components/providers/WalletProvider';
 import { appContext } from '../components/providers/AppProvider';
 
+import useMetamaskUtils from './metamask-utils.hook';
+
 export type ProductFactoryHookReturnType = {
-  getAllProducts: () => Promise<Array<IProduct | undefined>>;
+  getAllProducts: () => Promise<Array<IProduct | undefined> | undefined>;
   createProduct: (name: string) => Promise<void>;
   delegateProduct: (productId: number, newOwner: string) => Promise<void>;
   getPendingDelegations: () => Promise<void>;
@@ -23,6 +26,7 @@ export type ProductFactoryHookReturnType = {
 };
 
 const useProductFactory = (): ProductFactoryHookReturnType => {
+  const { isMetamaskError } = useMetamaskUtils();
   const { enqueueSnackbar } = useSnackbar();
   const { setIsLoading } = useContext(appContext);
   const { web3Provider, address, connected } = useContext(
@@ -68,81 +72,137 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
 
   const getAllProducts = async () => {
     setIsLoading(true);
-    const size = await getProductsSize();
-    const productPromises = [];
-    for (let index = 0; index < size; index += 1) {
-      productPromises.push(getProductByIndex(index));
+    try {
+      const size = await getProductsSize();
+      const productPromises = [];
+      for (let index = 0; index < size; index += 1) {
+        productPromises.push(getProductByIndex(index));
+      }
+      const results: Array<IProduct | undefined> = await Promise.all(
+        productPromises,
+      );
+      setProducts(results);
+      return results;
+    } catch (error) {
+      if (isMetamaskError(error) && error.code === 4001) {
+        enqueueSnackbar('Transaction rejected', { variant: 'error' });
+      } else {
+        enqueueSnackbar('Operation failed', { variant: 'error' });
+      }
+      console.log('Get All Products Error: ', error);
+      return undefined;
+    } finally {
+      setIsLoading(false);
     }
-    const results: Array<IProduct | undefined> = await Promise.all(
-      productPromises,
-    );
-    setProducts(results);
-    setIsLoading(false);
-    return results;
   };
 
   const getPendingDelegations = async () => {
     setIsLoading(true);
-    const latestProducts = await getAllProducts();
-    const delegations = latestProducts.filter(
-      (product) =>
-        product?.status.toString() === '1' &&
-        product.newOwner.toLowerCase() === address?.toLowerCase(),
-    );
-    setPendingDelegations(delegations);
-    setIsLoading(false);
+    try {
+      const latestProducts = await getAllProducts();
+      if (!latestProducts) {
+        throw new Error('Failed to get all products');
+      }
+      const delegations = latestProducts.filter(
+        (product) =>
+          product?.status.toString() === '1' &&
+          product.newOwner.toLowerCase() === address?.toLowerCase(),
+      );
+      setPendingDelegations(delegations);
+    } catch (error) {
+      if (isMetamaskError(error) && error.code === 4001) {
+        enqueueSnackbar('Transaction rejected', { variant: 'error' });
+      } else {
+        enqueueSnackbar('Operation failed', { variant: 'error' });
+      }
+      console.log('Pending Delegations Error: ', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const createProduct = async (name: string) => {
     setIsLoading(true);
-    if (connected) {
-      const result = await contract?.methods
-        .createProduct(name)
-        .send({ from: address });
-      const receipt = result.events.NewProduct.returnValues;
-      if (receipt) {
-        enqueueSnackbar('Product created successfully', { variant: 'success' });
+    try {
+      if (connected) {
+        const result = await contract?.methods
+          .createProduct(name)
+          .send({ from: address });
+        const receipt = result.events.NewProduct.returnValues;
+        if (receipt) {
+          enqueueSnackbar('Product created successfully', {
+            variant: 'success',
+          });
+        }
+      } else {
+        enqueueSnackbar('Connect wallet to continue', { variant: 'error' });
       }
-    } else {
-      enqueueSnackbar('Connect wallet to continue', { variant: 'error' });
+    } catch (error) {
+      if (isMetamaskError(error) && error.code === 4001) {
+        enqueueSnackbar('Transaction rejected', { variant: 'error' });
+      } else {
+        enqueueSnackbar('Operation failed', { variant: 'error' });
+      }
+      console.log('Create Product Error: ', error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const delegateProduct = async (productId: number, newOwner: string) => {
     setIsLoading(true);
-    if (connected) {
-      const result = await contract?.methods
-        .delegateProduct(productId, newOwner)
-        .send({ from: address });
-      const receipt = result.events.DelegateProduct.returnValues;
-      if (receipt) {
-        enqueueSnackbar('Product delegated successfully', {
-          variant: 'success',
-        });
+    try {
+      if (connected) {
+        const result = await contract?.methods
+          .delegateProduct(productId, newOwner)
+          .send({ from: address });
+        const receipt = result.events.DelegateProduct.returnValues;
+        if (receipt) {
+          enqueueSnackbar('Product delegated successfully', {
+            variant: 'success',
+          });
+        }
+      } else {
+        enqueueSnackbar('Connect wallet to continue', { variant: 'error' });
       }
-    } else {
-      enqueueSnackbar('Connect wallet to continue', { variant: 'error' });
+    } catch (error) {
+      if (isMetamaskError(error) && error.code === 4001) {
+        enqueueSnackbar('Transaction rejected', { variant: 'error' });
+      } else {
+        enqueueSnackbar('Operation failed', { variant: 'error' });
+      }
+      console.log('Delegate Product Error: ', error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const acceptProduct = async (productId: number) => {
     setIsLoading(true);
-    if (connected) {
-      const result = await contract?.methods
-        .acceptProduct(productId)
-        .send({ from: address });
-      const receipt = result.events.AcceptProduct.returnValues;
-      if (receipt) {
-        enqueueSnackbar('Product accepted successfully', {
-          variant: 'success',
-        });
+    try {
+      if (connected) {
+        const result = await contract?.methods
+          .acceptProduct(productId)
+          .send({ from: address });
+        const receipt = result.events.AcceptProduct.returnValues;
+        if (receipt) {
+          enqueueSnackbar('Product accepted successfully', {
+            variant: 'success',
+          });
+        }
+      } else {
+        enqueueSnackbar('Connect wallet to continue', { variant: 'error' });
       }
-    } else {
-      enqueueSnackbar('Connect wallet to continue', { variant: 'error' });
+    } catch (error) {
+      if (isMetamaskError(error) && error.code === 4001) {
+        enqueueSnackbar('Transaction rejected', { variant: 'error' });
+      } else {
+        enqueueSnackbar('Operation failed', { variant: 'error' });
+      }
+      console.log('Delegate Product Error: ', error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   useEffect(() => {

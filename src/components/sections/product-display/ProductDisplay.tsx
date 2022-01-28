@@ -10,12 +10,14 @@ import useProductFactory from '../../../hooks/product-factory.hook';
 import { productFactoryContext } from '../../providers/ProductFactoryProvider';
 import EmptyData from '../../common/empty-data/EmptyData';
 import EnhancedTable from '../../common/enhanced-table/EnhancedTable';
+import { appContext } from '../../providers/AppProvider';
 
 const ProductDisplay: React.FC = () => {
   const { getAllProducts } = useProductFactory();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(0);
   const { products, contract } = useContext(productFactoryContext);
+  const { isLoading } = useContext(appContext);
 
   const handleDialogOpen = (id: number) => {
     setSelectedProductId(id);
@@ -35,6 +37,12 @@ const ProductDisplay: React.FC = () => {
       getAllProducts();
     }
   }, [contract]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      handleDialogClose();
+    }
+  }, [isLoading]);
 
   return (
     <>
