@@ -11,9 +11,11 @@ import EmptyData from '../../common/empty-data/EmptyData';
 import { walletProviderContext } from '../../providers/WalletProvider';
 import Forbidden from '../../common/forbidden/Forbidden';
 import EnhancedTable from '../../common/enhanced-table/EnhancedTable';
+import { appContext } from '../../providers/AppProvider';
 
 const PendingDelegations: React.FC = () => {
   const { getPendingDelegations, acceptProduct } = useProductFactory();
+  const { shouldRefresh, setShouldRefresh } = useContext(appContext);
   const { contract, pendingDelegations } = useContext(productFactoryContext);
   const { connected } = useContext(walletProviderContext);
 
@@ -26,6 +28,13 @@ const PendingDelegations: React.FC = () => {
       getPendingDelegations();
     }
   }, [contract, connected]);
+
+  useEffect(() => {
+    if (shouldRefresh) {
+      getPendingDelegations();
+      setShouldRefresh(false);
+    }
+  }, [shouldRefresh]);
 
   return connected ? (
     <>

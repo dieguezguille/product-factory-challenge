@@ -28,7 +28,7 @@ export type ProductFactoryHookReturnType = {
 const useProductFactory = (): ProductFactoryHookReturnType => {
   const { isMetamaskError } = useMetamaskUtils();
   const { enqueueSnackbar } = useSnackbar();
-  const { setIsLoading } = useContext(appContext);
+  const { setIsLoading, setShouldRefresh } = useContext(appContext);
   const { web3Provider, address, connected } = useContext(
     walletProviderContext,
   );
@@ -130,6 +130,7 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
           .send({ from: address });
         const receipt = result.events.NewProduct.returnValues;
         if (receipt) {
+          setShouldRefresh(true);
           enqueueSnackbar('Product created successfully', {
             variant: 'success',
           });
@@ -158,6 +159,7 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
           .send({ from: address });
         const receipt = result.events.DelegateProduct.returnValues;
         if (receipt) {
+          setShouldRefresh(true);
           enqueueSnackbar('Product delegated successfully', {
             variant: 'success',
           });
@@ -186,6 +188,7 @@ const useProductFactory = (): ProductFactoryHookReturnType => {
           .send({ from: address });
         const receipt = result.events.AcceptProduct.returnValues;
         if (receipt) {
+          setShouldRefresh(true);
           enqueueSnackbar('Product accepted successfully', {
             variant: 'success',
           });

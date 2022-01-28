@@ -17,7 +17,7 @@ const ProductDisplay: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(0);
   const { products, contract } = useContext(productFactoryContext);
-  const { isLoading } = useContext(appContext);
+  const { isLoading, shouldRefresh, setShouldRefresh } = useContext(appContext);
 
   const handleDialogOpen = (id: number) => {
     setSelectedProductId(id);
@@ -43,6 +43,13 @@ const ProductDisplay: React.FC = () => {
       handleDialogClose();
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    if (shouldRefresh) {
+      handleRefresh();
+      setShouldRefresh(false);
+    }
+  }, [shouldRefresh]);
 
   return (
     <>

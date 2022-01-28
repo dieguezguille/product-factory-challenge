@@ -1,16 +1,22 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Stack, Typography, Grid, Button, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import useProductFactory from '../../../hooks/product-factory.hook';
 import { walletProviderContext } from '../../providers/WalletProvider';
 import Forbidden from '../../common/forbidden/Forbidden';
+import { RoutesEnum } from '../../../enums/routes.enum';
+import { appContext } from '../../providers/AppProvider';
 
 const ProductCreation: React.FC = () => {
   const { createProduct } = useProductFactory();
+  const navigate = useNavigate();
   const { connected } = useContext(walletProviderContext);
+  const { shouldRefresh, setShouldRefresh } = useContext(appContext);
   const handleSubmit = async (values: { name: string }) => {
     await createProduct(values.name);
   };
@@ -27,6 +33,13 @@ const ProductCreation: React.FC = () => {
     }),
     onSubmit: handleSubmit,
   });
+
+  useEffect(() => {
+    if (shouldRefresh) {
+      navigate(RoutesEnum.PRODUCTS);
+      setShouldRefresh(false);
+    }
+  }, [shouldRefresh]);
 
   return connected ? (
     <Stack spacing={2}>
