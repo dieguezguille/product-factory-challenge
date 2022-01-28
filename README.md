@@ -12,7 +12,7 @@ La dApp debe permitir:
 
 El smart contract `ProductFactory` se encuentra en la Testnet Mumbai de Polygon y su address es:
 
-  - `0xd9E0b2C0724F3a01AaECe3C44F8023371f845196`
+  - `0xd9E0b2C0724F3a01AaECe3C44F8023371f845196` (Official Challenge Contract)
 
 La dApp debe desarrollarse con `ReactJS` y la librería `web3.js`
 
@@ -31,7 +31,7 @@ Se valorará todo el background que considere colocar como tests, readmes, docum
 
 ## Notas
 
-- Es posible ver la última versión del proyecto deployado en Heroku en el siguiente link
+- Es posible ver la última versión de la solución deployada en Heroku en el siguiente link. Para evitar el spam y la exposición del contrato oficial del challenge se deployó el mismo código del challenge (verificado) utilizando Remix IDE en otra dirección: `0x34251Bd869e4A8ef4C2661E7b3bC68dba2E7aC48` (Custom Challenge Contract). Allí se encuentra el contrato que NO corresponde al challenge pero cuyo código es idéntico.
 
   - [Product Factory dApp](https://product-factory.herokuapp.com/)
 
