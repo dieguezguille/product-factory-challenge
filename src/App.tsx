@@ -7,7 +7,7 @@ function App(): JSX.Element {
   return (
     <>
       <Loader />
-      <Routes />;
+      <Routes />
     </>
   );
 }
