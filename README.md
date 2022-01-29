@@ -20,7 +20,7 @@ No es necesario realizar todos los puntos, si los realiza es mejor y si tiene qu
 
 Se valorará todo el background que considere colocar como tests, readmes, documentación, etc.
 
-## Instrucciones
+## Instrucciones (See [here](https://github.com/dieguezguille/product-factory/blob/main/README_en.md) for an english version)
 
 1. Clonar el repositorio
 2. Instalar dependencias usando `yarn`

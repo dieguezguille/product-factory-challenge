@@ -20,7 +20,7 @@ It is not mandatory to solve every task but it's better if you do. If you have t
 
 Will value every piece of documentation and/or tests included in the final solution.
 
-## Instructions
+## Instructions (Ver [aquí](https://github.com/dieguezguille/product-factory/blob/main/README.md) la versión en español)
 
 1. Clone the repository
 2. Install dependencies using `yarn`
